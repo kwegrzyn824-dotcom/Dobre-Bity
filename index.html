@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎵 Radio Dobre Bity 🎧</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+/* Ogólne */
+body, html { margin:0; padding:0; font-family: Arial, sans-serif; background: url('https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat fixed; color:#fff; }
+.overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:-1; }
+
+/* Nagłówek */
+header { text-align:center; font-family:'Pacifico', cursive; font-size:4em; color:#00ff44; background: rgba(0,0,0,0.6); padding:20px 60px; border-radius:20px; box-shadow:0 0 20px rgba(0,255,68,0.7),0 0 40px rgba(0,255,68,0.5); text-shadow:0 0 5px #00ff44,0 0 10px #00ff44,0 0 20px #00ff44; margin:20px auto; }
+
+/* Zakładki */
+.tabs { display:flex; justify-content:center; margin:40px 0 20px 0; flex-wrap:wrap; position:relative; z-index:5; }
+.tab { padding:15px 30px; cursor:pointer; margin:0 10px; background:rgba(255,0,68,0.8); border-radius:10px 10px 0 0; font-weight:bold; font-size:1.3em; transition:0.3s; }
+.tab.active { background:#ff3388; box-shadow:0 -4px 6px rgba(0,0,0,0.4); }
+.tab:hover { background:#ff0044; }
+
+/* Sekcje */
+.section { display:none; max-width:1200px; margin:0 auto 40px; padding:20px; border-radius:15px; }
+.section.active { display:block; }
+
+/* Player */
+.player { background: linear-gradient(135deg,#ff0044,#00ffaa); background-size:400% 400%; animation:gradientBG 15s ease infinite; padding:15px; border-radius:15px; box-shadow:0 0 15px rgba(255,0,68,0.5),0 0 30px rgba(0,255,170,0.5); backdrop-filter: blur(8px); max-width:500px; margin:0 auto 20px; }
+@keyframes gradientBG { 0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;} }
+.player h2 { text-align:center; font-size:1.5em; margin-bottom:10px; }
+.radio-description { text-align:center; margin-top:10px; font-size:1em; }
+.smiley { font-size:3em; text-align:center; margin-top:10px; }
+
+#playPauseBtn { display:block; margin:15px auto; width:60px; height:60px; background:linear-gradient(135deg,#ff0044,#ff3388); color:#fff; font-size:1.5em; font-weight:bold; cursor:pointer; border:none; clip-path: polygon(50% 0%, 90% 25%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 25%); box-shadow:0 3px 8px rgba(0,0,0,0.5); transition:0.3s; }
+#playPauseBtn:hover { transform: scale(1.1); }
+audio { width:90%; margin-top:8px; }
+
+/* Pozdrowienia */
+.shoutouts ul { list-style:none; max-height:250px; overflow-y:auto; padding-right:5px; margin-bottom:15px; }
+.shoutouts li { margin-bottom:8px; padding:6px; background:rgba(255,255,255,0.1); border-radius:6px; }
+.shoutout-form input { padding:8px; border-radius:6px; border:none; margin-right:5px; }
+.shoutout-form button { padding:8px 12px; border:none; border-radius:6px; background:#ff3388; color:#fff; cursor:pointer; }
+.shoutout-form button:hover { background:#ff0044; }
+
+/* Ramówka */
+.schedule .day { margin-bottom:25px; }
+.schedule label { font-weight:bold; width:120px; display:inline-block; }
+.schedule div { margin-bottom:10px; }
+
+/* Stopka */
+footer { text-align:center; padding:20px; opacity:0.9; font-size:0.9em; position:relative; max-width:1200px; margin:0 auto 20px auto; }
+footer span { float:right; }
+footer img { width:50px; vertical-align:middle; margin-left:5px; }
+footer a img { width:24px; vertical-align:middle; margin-left:5px; transition: transform 0.2s; }
+footer a img:hover { transform: scale(1.2); }
+
+@media(max-width:900px){ .tabs { flex-direction:column; align-items:center; } .tab { margin:5px 0; font-size:1.1em; padding:12px 25px; } }
+</style>
+</head>
+<body>
+<div class="overlay"></div>
+
+<header id="radioHeader">Radio Dobre Bity</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="player">Player</div>
+  <div class="tab" data-tab="shoutouts">Pozdrowienia</div>
+  <div class="tab" data-tab="schedule">Ramówka</div>
+</div>
+
+<!-- Player -->
+<div id="player" class="section active player">
+<h2>Player Online</h2>
+<audio id="radioPlayer" controls>
+  <source src="http://4stream.pl:18284/stream" type="audio/mpeg">
+  Twoja przeglądarka nie obsługuje odtwarzacza audio.
+</audio>
+<button id="playPauseBtn">▶️</button>
+<div class="smiley">🎧😊</div>
+<div class="radio-description">Gramy z pasją wszystkie gatunki muzyczne – od rapu po disco polo. Nadajemy od 2023 roku 24h/7</div>
+</div>
+
+<!-- Pozdrowienia -->
+<div id="shoutouts" class="section shoutouts">
+<h2>Pozdrowienia</h2>
+<ul id="shoutoutList"></ul>
+<div class="shoutout-form">
+  <input id="shoutoutName" type="text" placeholder="Twoje imię" style="width:30%;">
+  <input id="shoutoutMessage" type="text" placeholder="Twoja wiadomość" style="width:50%;">
+  <button id="sendShoutout">Wyślij</button>
+</div>
+</div>
+
+<!-- Ramówka -->
+<div id="schedule" class="section schedule">
+<h2>Ramówka 24h / 7 dni</h2>
+<div class="day"><h3>Poniedziałek</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+<div class="day"><h3>Wtorek</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+<div class="day"><h3>Środa</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+<div class="day"><h3>Czwartek</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+<div class="day"><h3>Piątek</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+<div class="day"><h3>Sobota</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+<div class="day"><h3>Niedziela</h3><div><label>Audycja:</label><span></span></div><div><label>Prezenter:</label><span></span></div><div><label>Godzina:</label><span></span></div></div>
+</div>
+
+<footer>
+  &copy; 2023 🎵 Radio Dobre Bity 🎧 | Wszystkie prawa zastrzeżone
+  <span>
+    <a href="https://www.youtube.com/@kajamikoajczyk754" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube"></a>
+    <a href="https://www.facebook.com/profile.php?id=100063611435687" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook"></a>
+  </span>
+</footer>
+
+<script>
+// Zakładki
+const tabs = document.querySelectorAll('.tab');
+const sections = document.querySelectorAll('.section');
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const target = tab.dataset.tab;
+    sections.forEach(s=>s.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
+});
+
+// Player Play/Pause
+const playerAudio = document.getElementById('radioPlayer');
+const btn = document.getElementById('playPauseBtn');
+let playing = false;
+btn.addEventListener('click', ()=>{
+  if(!playing){ playerAudio.play(); btn.textContent="⏸️"; playing=true; }
+  else { playerAudio.pause(); btn.textContent="▶️"; playing=false; }
+});
+
+// WebSocket (pozdrowienia)
+const ws = new WebSocket('wss://TWÓJ-SERWER:8080'); // <-- opcjonalne, możesz go wyłączyć jeśli nie masz serwera
+ws.onmessage = (event)=>{
+  const cmd = JSON.parse(event.data);
+  if(cmd.action==='shoutout'){
+    const li = document.createElement('li');
+    li.textContent = `${cmd.name}: ${cmd.message}`;
+    document.getElementById('shoutoutList').appendChild(li);
+  }
+};
+
+// Wysyłanie pozdrowień
+document.getElementById('sendShoutout').addEventListener('click', ()=>{
+  const name = document.getElementById('shoutoutName').value.trim();
+  const message = document.getElementById('shoutoutMessage').value.trim();
+  if(name && message){
+    // jeśli masz serwer WebSocket:
+    if(ws.readyState === WebSocket.OPEN){
+      ws.send(JSON.stringify({action:'shoutout', name:name, message:message}));
+    }
+    const li = document.createElement('li');
+    li.textContent = `${name}: ${message}`;
+    document.getElementById('shoutoutList').appendChild(li);
+    document.getElementById('shoutoutName').value='';
+    document.getElementById('shoutoutMessage').value='';
+  } else { alert('Wpisz swoje imię i wiadomość!'); }
+});
+</script>
+</body>
+</html>
+

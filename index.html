@@ -54,12 +54,11 @@ footer a img:hover { transform: scale(1.2); }
 
 <div id="player" class="section active player">
 <h2>Player Online</h2>
-<!-- HTTPS stream przez CORS proxy -->
-<audio id="radioPlayer" controls>
-  <source src="https://corsproxy.io/?https://4stream.pl:18284/stream" type="audio/mpeg">
+<audio id="radioPlayer" controls autoplay>
+  <source src="https://odd-rain-9143radio-proxy-1.kwegrzyn824.workers.dev" type="audio/mpeg">
   Twoja przeglądarka nie obsługuje odtwarzacza audio.
 </audio>
-<button id="playPauseBtn">▶️</button>
+<button id="playPauseBtn">⏸️</button>
 <div class="smiley">🎧😊</div>
 <div class="radio-description">Gramy z pasją wszystkie gatunki muzyczne – od rapu po disco polo. Nadajemy od 2023 roku 24h/7</div>
 </div>
@@ -85,6 +84,7 @@ footer a img:hover { transform: scale(1.2); }
 </footer>
 
 <script>
+// Tab switch
 const tabs = document.querySelectorAll('.tab');
 const sections = document.querySelectorAll('.section');
 tabs.forEach(tab=>{
@@ -97,15 +97,16 @@ tabs.forEach(tab=>{
   });
 });
 
+// Play/Pause button
 const playerAudio = document.getElementById('radioPlayer');
 const btn = document.getElementById('playPauseBtn');
-let playing = false;
+let playing = true; // autoplay startuje od razu
 btn.addEventListener('click', ()=>{
   if(!playing){ playerAudio.play(); btn.textContent="⏸️"; playing=true; }
   else { playerAudio.pause(); btn.textContent="▶️"; playing=false; }
 });
 
-// Prosty panel pozdrowień lokalnie
+// Shoutouts panel
 const sendBtn = document.getElementById('sendShoutout');
 sendBtn.addEventListener('click', ()=>{
   const name = document.getElementById('shoutoutName').value.trim();
@@ -121,3 +122,4 @@ sendBtn.addEventListener('click', ()=>{
 </script>
 </body>
 </html>
+
